@@ -1,6 +1,6 @@
 const pos = 1;
 // LIMITO LA CANTIDAD DE POST
-fetch(`http://localhost:3000/posts?_pos=${pos}&_limit=14`)
+fetch(`http://localhost:3000/posts?_pos=${pos}&_limit=11`)
   .then((response) => response.json())
   .then((data) => listPosts(data));
 
@@ -15,6 +15,7 @@ fetch(`http://localhost:3000/posts?_pos=${pos}&_limit=14`)
   
 //RENDERIZAR POST EN DIV
 function  listPost(post, cont, div) {
+    console.log(cont)
     let content = document.getElementById("card-post");
     if (cont === 0) {
       div.className = "row";
@@ -38,7 +39,6 @@ function  listPost(post, cont, div) {
   
     else {
      let laster = document.querySelectorAll(".row").length - 1;
-    console.log(laster)
     document.querySelectorAll(".row")[laster].innerHTML += `
     <div class="col-lg-4 col-md-6 col-sm-12">
       <div class="card m-auto my-2" style="">
@@ -70,22 +70,34 @@ function  listPost(post, cont, div) {
   }
   
   function modalContent(post) {
-    //fill the modal with the post information
     document.querySelector(".modal-title").textContent = post.title;
     document.querySelector(".modal-body").textContent = post.body;
-    //edit post
     document.querySelector("#edit-button").dataset.post = post.id;
     document.querySelector("#edit-button-icon").dataset.post = post.id;
-    //confirm edit
     document.querySelector("#confirm-edit").dataset.edit = post.id;
     document.querySelector("#confirm-edit-icon").dataset.edit = post.id;
-    //confirm delete
     document.querySelector("#confirm-delete").dataset.delete = post.id;
     document.querySelector("#confirm-delete-icon").dataset.delete = post.id;
-    //comments
     document.querySelector("#show-comments").dataset.comments = post.id;
     document.querySelector("#show-comments-icon").dataset.comments = post.id;
     document.querySelector("#comments").classList.remove("show");
     ;
   }
- 
+ // GET COMENTS
+ document.addEventListener( "click", function(e){
+    if(e.target.matches("[data-comments]")) viewComments(e.target.dataset.comments)
+   
+ })
+
+ function viewComments(post){
+ fetch(`http://localhost:3000/posts/${post}/comments/`)
+ .then((response) => response.json())
+ .then((comments) => {
+   readComments(comments);
+   console.log(comments);
+ })
+}
+function readComments(comments){
+
+
+}
