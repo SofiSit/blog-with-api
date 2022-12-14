@@ -15,7 +15,6 @@ fetch(`http://localhost:3000/posts?_pos=${pos}&_limit=11`)
   
 //RENDERIZAR POST EN DIV
 function  listPost(post, cont, div) {
-    console.log(cont)
     let content = document.getElementById("card-post");
     if (cont === 0) {
       div.className = "row";
@@ -44,6 +43,7 @@ function  listPost(post, cont, div) {
       <div class="card m-auto my-2" style="">
         
         <div class="card-body position-relative cursor-pointer" data-id="${post.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+
       <img src="https://picsum.photos/id/${post.id}/200/200 " class="card-img-top cursor-pointer blur" alt="..." data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="${post.id}"> 
        
           <h5 class="card-title card__letters title__post" data-id="${post.id}">${post.title}</h5>
@@ -55,18 +55,20 @@ function  listPost(post, cont, div) {
       ;
     }
   }
-  //CLICK IMAGEN POST 
+ //CLICK IMAGEN POST 
   document.addEventListener("click", function (e) {
     if (e.target.matches("[data-id]")) infoModal(e);
   });
  // INFO CORRECTA DEL POST EN EL MODAL
+
+ async function fetchPost(post) {
+    return await fetch(`http://localhost:3000/posts/${post}`);
+  }
+  
   function infoModal(e) {
     fetchPost(e.target.dataset.id)
       .then((response) => response.json())
       .then((post) => modalContent(post));
-  }
-  async function fetchPost(post) {
-    return await fetch(`http://localhost:3000/posts/${post}`);
   }
   
   function modalContent(post) {
@@ -83,4 +85,30 @@ function  listPost(post, cont, div) {
     document.querySelector("#comments").classList.remove("show");
     ;
   }
- 
+  
+  document.addEventListener( "click", function(e){
+    if(e.target.matches("[data-comments]")) viewComments(e.target.dataset.comments)
+   
+ })
+
+ function viewComments(comments){
+ fetch(`http://localhost:3000/posts/${post}/comments/`)
+ .then((response) => response.json())
+ .then((comments) => {
+   readComments(comments);
+ })
+}
+function readComments(comments){
+ let element = document.getElementById("comments");
+    element.innerHTML = '<h3 class="text-center">Comments</h3>';
+    comments.forEach((comment) => {
+      element.innerHTML += `<div class="card card-body d-flex flex-row">
+      <div>
+      <div><b>${comment.name}</b></div>
+      <div class="comment__body">${comment.body}</div>
+      <div><i>${comment.email}</i></div>
+      </div>
+    </div>`;
+    });
+  }
+
