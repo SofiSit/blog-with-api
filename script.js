@@ -91,7 +91,7 @@ function  listPost(post, cont, div) {
    
  })
 
- function viewComments(comments){
+ function viewComments(post){
  fetch(`http://localhost:3000/posts/${post}/comments/`)
  .then((response) => response.json())
  .then((comments) => {
