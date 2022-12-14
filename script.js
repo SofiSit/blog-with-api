@@ -1,8 +1,19 @@
 const pos = 1;
+
+let contadorPosts = 15;
+
+const morePostsBtn = document.querySelector("#morePosts");
+
 // LIMITO LA CANTIDAD DE POST
-fetch(`http://localhost:3000/posts?_pos=${pos}&_limit=11`)
+fetch(`http://localhost:3000/posts?_pos=${pos}&_limit=${contadorPosts}`)
   .then((response) => response.json())
   .then((data) => listPosts(data));
+
+  morePostsBtn.onclick = function(){
+    fetch(`http://localhost:3000/posts?_pos=${pos}&_limit=${contadorPosts}`)
+  .then((response) => response.json())
+  .then((data) => listPosts(data));
+  }
 
   function listPosts(data) {
     let div = document.createElement("div");
@@ -15,7 +26,7 @@ fetch(`http://localhost:3000/posts?_pos=${pos}&_limit=11`)
   
 //RENDERIZAR POST EN DIV
 function  listPost(post, cont, div) {
-    console.log(cont)
+    // console.log(cont)
     let content = document.getElementById("card-post");
     if (cont === 0) {
       div.className = "row";
@@ -68,6 +79,15 @@ function  listPost(post, cont, div) {
   async function fetchPost(post) {
     return await fetch(`http://localhost:3000/posts/${post}`);
   }
+
+  fetch("http://localhost:3000/users")
+  .then((response)=>response.json())
+  .then((data) => data.forEach(e => console.log(e.name)))
+
+  fetch("http://localhost:3000/users/1")
+  .then((response)=>response.json())
+  .then((data) => console.log(data.name))
+
   
   function modalContent(post) {
     document.querySelector(".modal-title").textContent = post.title;
@@ -81,6 +101,14 @@ function  listPost(post, cont, div) {
     document.querySelector("#show-comments").dataset.comments = post.id;
     document.querySelector("#show-comments-icon").dataset.comments = post.id;
     document.querySelector("#comments").classList.remove("show");
-    ;
+    fetch(`http://localhost:3000/users/${post.userId}`)
+  .then((response)=>response.json())
+  .then((data) => userNameEmail(data)
+  )
+  }
+
+  function userNameEmail(e){
+    document.querySelector("#modalUsername").textContent = e.name
+    document.querySelector("#modalUserEmail").textContent = e.email
   }
  
