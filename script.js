@@ -5,15 +5,18 @@ let contadorPosts = 15;
 const morePostsBtn = document.querySelector("#morePosts");
 
 // LIMITO LA CANTIDAD DE POST
-fetch(`http://localhost:3000/posts?_pos=${pos}&_limit=${contadorPosts}`)
-  .then((response) => response.json())
-  .then((data) => listPosts(data));
+
+  fetch(`http://localhost:3000/posts?_pos=${pos}&_limit=${contadorPosts}`)
+    .then((response) => response.json())
+    .then((data) => listPosts(data));
 
   morePostsBtn.onclick = function(){
-    fetch(`http://localhost:3000/posts?_pos=${pos}&_limit=${contadorPosts}`)
+    fetch(`http://localhost:3000/posts?_pos=${pos}&_start=${contadorPosts}&_limit=15`)
   .then((response) => response.json())
   .then((data) => listPosts(data));
+  contadorPosts += 15;
   }
+
   // window.onscroll = function() {scroll()};
   // function scroll() {
   //   let scroll = 500
@@ -99,10 +102,10 @@ function  listPost(post, cont, div) {
   // .then((response)=>response.json())
   // .then((data) => data.forEach(e => console.log(e.name)))
 
-  fetch("http://localhost:3000/comments/postID/3")
-  .then((response)=>response.json())
-  .then((data) => console.log(data))
-
+  // fetch("http://localhost:3000/comments/postID/3")
+  // .then((response)=>response.json())
+  // .then((data) => console.log(data))
+let dataId;
   
   function modalContent(post) {
     document.querySelector(".modal-title").textContent = post.title;
@@ -120,9 +123,7 @@ function  listPost(post, cont, div) {
   .then((response)=>response.json())
   .then((data) => userNameEmail(data)
   )
-  let divComment = document.createElement("div");
-  divComment.textContent = "Que tal?";
-  comments.appendChild(divComment);
+  dataId = post.id;
   }
 
   function userNameEmail(e){
@@ -156,3 +157,15 @@ function readComments(comments){
     });
   }
 
+  // fetch(`http://localhost:3000/posts/2/comments`)
+  // .then((response) => response.json())
+  // .then((comments) => {
+  //   console.log(comments);
+  // })
+
+  const confirmSuprimir = document.querySelector("#confirm-delete-icon");
+
+  confirmSuprimir.onclick = ()=>{
+    fetch(`http://localhost:3000/posts/${dataId}`, { method: 'DELETE'})
+    .then(document.location.reload(true));
+  }
