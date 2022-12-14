@@ -14,6 +14,16 @@ fetch(`http://localhost:3000/posts?_pos=${pos}&_limit=${contadorPosts}`)
   .then((response) => response.json())
   .then((data) => listPosts(data));
   }
+  // window.onscroll = function() {scroll()};
+  // function scroll() {
+  //   let scroll = 500
+  //   if (document.body.scrollTop > scroll || document.documentElement.scrollTop > scroll) {
+  //     fetch(`http://localhost:3000/posts?_pos=${pos}&_limit=${contadorPosts}`)
+  //     .then((response) => response.json())
+  //     .then((data) => listPosts(data));
+  //   }
+  //   scroll +=1000;
+  // }
 
   function listPosts(data) {
     let div = document.createElement("div");
@@ -80,13 +90,13 @@ function  listPost(post, cont, div) {
     return await fetch(`http://localhost:3000/posts/${post}`);
   }
 
-  fetch("http://localhost:3000/users")
-  .then((response)=>response.json())
-  .then((data) => data.forEach(e => console.log(e.name)))
+  // fetch("http://localhost:3000/users")
+  // .then((response)=>response.json())
+  // .then((data) => data.forEach(e => console.log(e.name)))
 
-  fetch("http://localhost:3000/users/1")
+  fetch("http://localhost:3000/comments/postID/3")
   .then((response)=>response.json())
-  .then((data) => console.log(data.name))
+  .then((data) => console.log(data))
 
   
   function modalContent(post) {
@@ -105,10 +115,28 @@ function  listPost(post, cont, div) {
   .then((response)=>response.json())
   .then((data) => userNameEmail(data)
   )
+  let divComment = document.createElement("div");
+  divComment.textContent = "Que tal?";
+  comments.appendChild(divComment);
   }
 
   function userNameEmail(e){
     document.querySelector("#modalUsername").textContent = e.name
     document.querySelector("#modalUserEmail").textContent = e.email
   }
- 
+
+  const comments = document.querySelector("#comments")
+  
+function createDivComments(){
+  let divComment = document.createElement("div");
+  divComment.textContent = "Que tal?";
+  comments.appendChild(divComment);
+}
+
+function addComments(){
+
+}
+
+// fetch(`http://localhost:3000/users/${post.userId}`)
+//   .then((response)=>response.json())
+//   .then((data) => console.log(data))
