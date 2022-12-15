@@ -45,7 +45,7 @@ function  listPost(post, cont, div) {
     div.className = "row";
     div.innerHTML +=
       `<div class="col-lg-4 col-md-6 col-sm-12">
-        <div class="card border-dark mb-3  d-flex  m-auto my-2" >
+        <div role="button" class="card   border-dark mb-3  d-flex  m-auto my-2" >
           
           <div class="card-body position-relative cursor-pointer" data-id="${post.id}" data-bs-toggle="modal" data-bs-target="#exampleModal" style="height: 52.4vh">
 
