@@ -1,5 +1,4 @@
 const pos = 1;
-
 let contadorPosts = 15;
 
 const morePostsBtn = document.querySelector("#morePosts");
@@ -37,9 +36,9 @@ fetch(`http://localhost:3000/posts?_pos=${pos}&_limit=${contadorPosts}`)
 //RENDERIZAR POST EN DIV
 function  listPost(post, cont, div) {
     let content = document.getElementById("card-post");
-    if (cont === 0) {
+    console.log(cont)
+    if (cont < 99) {
       div.className = "row";
-  
       div.innerHTML += `
         <div class="col-lg-4 col-md-6 col-sm-12">
           <div class="card m-auto my-2" style="">
@@ -56,26 +55,9 @@ function  listPost(post, cont, div) {
       `;
       content.appendChild(div);
     }
-  
-    else {
-     let laster = document.querySelectorAll(".row").length - 1;
-    document.querySelectorAll(".row")[laster].innerHTML += `
-    <div class="col-lg-4 col-md-6 col-sm-12">
-      <div class="card m-auto my-2" style="">
-        
-        <div class="card-body position-relative cursor-pointer" data-id="${post.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">
-
-      <img src="https://picsum.photos/id/${post.id}/200/200 " class="card-img-top cursor-pointer blur" alt="..." data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="${post.id}"> 
-       
-          <h5 class="card-title card__letters title__post" data-id="${post.id}">${post.title}</h5>
-          <!--<p class="card-text">${post.body}</p>-->
-        </div>
-      </div>
-    </div>
-  ` 
-      ;
-    }
   }
+
+
  //CLICK IMAGEN POST 
   document.addEventListener("click", function (e) {
     if (e.target.matches("[data-id]")) infoModal(e);
@@ -99,9 +81,9 @@ function  listPost(post, cont, div) {
   // .then((response)=>response.json())
   // .then((data) => data.forEach(e => console.log(e.name)))
 
-  fetch("http://localhost:3000/comments/postID/3")
+  /* fetch("http://localhost:3000/comments/postID/3")
   .then((response)=>response.json())
-  .then((data) => console.log(data))
+  .then((data) => console.log(data)) */
 
   
   function modalContent(post) {
@@ -116,14 +98,13 @@ function  listPost(post, cont, div) {
     document.querySelector("#show-comments").dataset.comments = post.id;
     document.querySelector("#show-comments-icon").dataset.comments = post.id;
     document.querySelector("#comments").classList.remove("show");
+    
     fetch(`http://localhost:3000/users/${post.userId}`)
   .then((response)=>response.json())
   .then((data) => userNameEmail(data)
   )
-  let divComment = document.createElement("div");
-  divComment.textContent = "Que tal?";
-  comments.appendChild(divComment);
-  }
+    
+  dataId = post.id;    }
 
   function userNameEmail(e){
     document.querySelector("#modalUsername").textContent = e.name
@@ -132,6 +113,7 @@ function  listPost(post, cont, div) {
   
   document.addEventListener( "click", function(e){
     if(e.target.matches("[data-comments]")) viewComments(e.target.dataset.comments)
+   
    
  })
 
@@ -156,3 +138,9 @@ function readComments(comments){
     });
   }
 
+  const confirmSuprimir = document.querySelector("#confirm-delete-icon");
+
+  confirmSuprimir.onclick = ()=>{
+    fetch('http://localhost:3000/posts/${dataId}', { method: 'DELETE'})
+    document.location.reload(true);
+  }
