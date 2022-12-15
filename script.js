@@ -40,14 +40,14 @@ const morePostsBtn = document.querySelector("#morePosts");
 //RENDERIZAR POST EN DIV
 function  listPost(post, cont, div) {
   let content = document.getElementById("card-post");
-  console.log(cont)
+  // console.log(cont)
   if (cont < 99) {
     div.className = "row";
     div.innerHTML +=
       `<div class="col-lg-4 col-md-6 col-sm-12">
         <div class="card m-auto my-2" style="">
           
-          <div class="card-body position-relative cursor-pointer" data-id="${post.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          <div class="card-body position-relative cursor-pointer" data-id="${post.id}" data-bs-toggle="modal" data-bs-target="#exampleModal" style="height: 52.4vh">
 
            <img src="https://picsum.photos/id/${post.id}/200/200 " class="card-img-top cursor-pointer blur" alt="..." data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="${post.id}"> 
         
@@ -87,6 +87,9 @@ function  listPost(post, cont, div) {
   // .then((response)=>response.json())
   // .then((data) => console.log(data))
 let dataId;
+let autor;
+const bodyEdit = document.querySelector("#edit-body");
+const titleEdit = document.querySelector("#edit-title");
   
   function modalContent(post) {
     document.querySelector(".modal-title").textContent = post.title;
@@ -105,6 +108,9 @@ let dataId;
   .then((data) => userNameEmail(data)
   )
   dataId = post.id;
+  autor = post.userId
+  bodyEdit.textContent = post.body;
+  titleEdit.value = post.title;
   }
 
   function userNameEmail(e){
@@ -145,3 +151,33 @@ function readComments(comments){
     fetch(`http://localhost:3000/posts/${dataId}`, { method: 'DELETE'})
     .then(document.location.reload(true));
   }
+
+  const confirmEdit = document.querySelector("#confirm-edit");
+
+  const edited = " (Edited)"
+
+  confirmEdit.onclick = ()=> {
+    
+    fetch(`http://localhost:3000/posts/${dataId}`,{
+      method: 'PUT',
+      headers: {
+          "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId:autor, id:dataId, body: bodyEdit.value, title: titleEdit.value + edited })
+    })
+    .then(document.location.reload(true))}
+    // bodyEdit.textContent = bodyEdit.value;
+    // titleEdit.value = titleEdit.value;
+
+
+//   fetch('http://localhost:3000/posts/16', {
+//         method: 'PUT',
+//         headers: {
+//             "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({ body: 'ññññ', title: 'ññññ' })
+//  })
+// .then(res => res.json())
+// .then(res=> {
+//       console.log(res);
+// });
